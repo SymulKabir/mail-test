@@ -9,8 +9,9 @@ const server = new SMTPServer({
   allowInsecureAuth: true,
   authOptional: true,
   onAuth(auth, session, callback) {
+    console.log("Hello from onAut section")
     const { username, password } = auth;
-    if (username === "symul@somacharnews.com" && password === "ysadfswe3r") {
+    if (username === "symul@micple.com" && password === "ysadfswe3r") {
       return callback(null, { user: username });
     } else {
       return callback(new Error("Invalid username or password"));
@@ -29,6 +30,7 @@ const server = new SMTPServer({
     cb();
   },
   onData(stream, session, callback) {
+    console.log("Hello form onData")
     simpleParser(stream, async (err, parsed) => {
       if (err) {
         console.error("Error parsing email:", err);
