@@ -97,7 +97,7 @@ const server = new SMTPServer({
     });
   },
 });
-const PORT = 25;
+const PORT = 587;
 // Start the SMTP server
 server.listen(PORT, () => {
   console.log(`Mail server is listening on PORT: ${PORT}`);
