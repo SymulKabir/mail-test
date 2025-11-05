@@ -1,27 +1,36 @@
-import nodemailer from 'nodemailer'
+const nodemailer = require("nodemailer");
 
 const sendMail = async () => {
-  const transporter = nodemailer.createTransport({
-    host: 'mail.somacharnews.com',
-    port: 587, // or 465 if you configured SSL
-    secure: false, // true for port 465
-    auth: {
-      user: 'test@somacharnews.com', // change to your real mailbox
-      pass: 'your_password_here',    // password for that mailbox
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  })
+  try {
+    // Create transporter using your mail server
+    const transporter = nodemailer.createTransport({
+      host: "mail.somacharnews.com",
+      port: 587, // use 465 for SMTPS
+      secure: false, // true for 465, false for 587 STARTTLS
+      auth: {
+        user: "symul@somacharnews.com",
+        pass: "your_mail_password_here", // use strong password
+      },
+      tls: {
+        rejectUnauthorized: false, // allow self-signed certs (optional)
+      },
+    });
 
-  const info = await transporter.sendMail({
-    from: 'test@somacharnews.com',
-    to: 'someone@gmail.com',
-    subject: 'Test Email from somacharnews.com',
-    text: 'This is a test email sent from my Node.js mail server.',
-  })
+    // Mail options
+    const mailOptions = {
+      from: '"Symul Kabir" <symul@somacharnews.com>',
+      to: "saimonpranta@gmail.com",
+      subject: "Professional Node.js Mail Test",
+      text: "Hello! This is a professional test mail sent from my Node.js mail sender.",
+      html: "<p>Hello! This is a <b>professional</b> test mail sent from my Node.js mail sender.</p>",
+    };
 
-  console.log('Message sent: %s', info.messageId)
-}
+    // Send mail
+    const info = await transporter.sendMail(mailOptions);
+    console.log("✅ Mail sent:", info.messageId);
+  } catch (err) {
+    console.error("❌ Error sending mail:", err);
+  }
+};
 
-sendMail().catch(console.error)
+sendMail();
