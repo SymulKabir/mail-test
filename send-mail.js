@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 // const transporter = nodemailer.createTransport({
-//   host: "mail.somacharnews.com", 
+//   host: "mail.somacharnews.com",
 //   port: 587,
 //   secure: false, // use true for 465
 //   auth: {
@@ -19,11 +19,10 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "symul@somacharnews.com",
-    pass: "YOUR_REAL_PASSWORD", // actual mailbox password
+    pass: "YOUR_PASSWORD",
   },
   tls: { rejectUnauthorized: false },
 });
-
 
 const mailOptions = {
   from: '"Symul" <symul@somacharnews.com>',
@@ -34,7 +33,9 @@ const mailOptions = {
   dkim: {
     domainName: "somacharnews.com",
     keySelector: "default",
-    privateKey: require("fs").readFileSync("/etc/opendkim/keys/somacharnews.com/default.private"),
+    privateKey: require("fs").readFileSync(
+      "/etc/opendkim/keys/somacharnews.com/default.private"
+    ),
   },
 };
 
