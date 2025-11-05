@@ -1,36 +1,34 @@
 const nodemailer = require("nodemailer");
 
-const sendMail = async () => {
-  try {
-    // Create transporter using your mail server
-    const transporter = nodemailer.createTransport({
-      host: "mail.somacharnews.com",
-      port: 587, // use 465 for SMTPS
-      secure: false, // true for 465, false for 587 STARTTLS
-      auth: {
-        user: "symul@somacharnews.com",
-        pass: "your_mail_password_here", // use strong password
-      },
-      tls: {
-        rejectUnauthorized: false, // allow self-signed certs (optional)
-      },
-    });
+const transporter = nodemailer.createTransport({
+  host: "mail.somacharnews.com",
+  port: 587,
+  secure: false, // use true for 465
+  auth: {
+    user: "symul@somacharnews.com",
+    pass: "YOUR_PASSWORD",
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
-    // Mail options
-    const mailOptions = {
-      from: '"Symul Kabir" <symul@somacharnews.com>',
-      to: "saimonpranta@gmail.com",
-      subject: "Professional Node.js Mail Test",
-      text: "Hello! This is a professional test mail sent from my Node.js mail sender.",
-      html: "<p>Hello! This is a <b>professional</b> test mail sent from my Node.js mail sender.</p>",
-    };
-
-    // Send mail
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ Mail sent:", info.messageId);
-  } catch (err) {
-    console.error("❌ Error sending mail:", err);
-  }
+const mailOptions = {
+  from: '"Symul" <symul@somacharnews.com>',
+  to: "saimonpranta@gmail.com",
+  subject: "Professional Mail Test",
+  text: "Hello! This is a professional test from my Node.js mail server.",
+  html: "<p>Hello! This is a <b>professional test</b> from my Node.js mail server.</p>",
+  dkim: {
+    domainName: "somacharnews.com",
+    keySelector: "default",
+    privateKey: require("fs").readFileSync("/etc/opendkim/keys/somacharnews.com/default.private"),
+  },
 };
 
-sendMail();
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    return console.error("Error sending mail:", error);
+  }
+  console.log("✅ Mail sent:", info.response);
+});
