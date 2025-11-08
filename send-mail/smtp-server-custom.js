@@ -47,7 +47,12 @@ const server = new SMTPServer({
           host: mxHost,
           port: 25,
           secure: false,
-          tls: { rejectUnauthorized: false } // allow self-signed TLS
+          tls: { rejectUnauthorized: false }, // allow self-signed TLS
+          dkim: {  // This is optional configuration but recommended
+            domainName: "somacharnews.com",
+            keySelector: "default",
+            privateKey: require("fs").readFileSync("/etc/opendkim/keys/somacharnews.com/default.private")
+          }
         });
 
         await transporter.sendMail({
