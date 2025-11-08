@@ -1,28 +1,28 @@
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  host: "mail.somacharnews.com",
-  port: 587,
-  secure: false, // use true for 465
-  auth: {
-    user: "symul@somacharnews.com",
-    pass: "YOUR_PASSWORD",
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
 // const transporter = nodemailer.createTransport({
 //   host: "mail.somacharnews.com",
-//   port: 25,
-//   secure: false,
+//   port: 587,
+//   secure: false, // use true for 465
 //   auth: {
 //     user: "symul@somacharnews.com",
 //     pass: "YOUR_PASSWORD",
 //   },
-//   tls: { rejectUnauthorized: false },
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
 // });
+
+const transporter = nodemailer.createTransport({
+  host: "mail.somacharnews.com",
+  port: 25,
+  secure: false,
+  auth: {
+    user: "symul@somacharnews.com",
+    pass: "YOUR_PASSWORD",
+  },
+  tls: { rejectUnauthorized: false },
+});
 
 const mailOptions = {
   from: '"Symul" <symul@somacharnews.com>',
