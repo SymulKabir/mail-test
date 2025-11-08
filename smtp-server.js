@@ -2,49 +2,77 @@
 const { SMTPServer } = require('smtp-server');
 const { simpleParser } = require('mailparser');
 const nodemailer = require('nodemailer');
-const dns = require('dns');
 
+// Configure your external SMTP relay
+const RELAY_SMTP = {
+  host: 'smtp.gmail.com',      // External SMTP host
+  port: 587,                   // TLS port
+  secure: false,               // true for 465, false for 587
+  auth: {
+    user: 'your@gmail.com',    // Your SMTP username
+    pass: 'your-app-password', // Your SMTP password or app password
+  }
+};
+
+// Start the SMTP server
 const server = new SMTPServer({
-  authOptional: true,
+  authOptional: true, // allow unauthenticated connections
   onConnect(session, callback) {
-    console.log(`New connection from ${session.remoteAddress}`);
+    console.log(`🔗 New connection from ${session.remoteAddress}`);
+    callback();
+  },
+  onAuth(auth, session, callback) {
+    const { username, password } = auth;
+    if (username === 'symul@somacharnews.com' && password === 'YOUR_PASSWORD') {
+      console.log('✅ Authenticated user:', username);
+      return callback(null, { user: username });
+    }
+    return callback(new Error('Invalid username or password'));
+  },
+  onMailFrom(address, session, callback) {
+    console.log('📩 MAIL FROM:', address.address);
+    callback();
+  },
+  onRcptTo(address, session, callback) {
+    console.log('📬 RCPT TO:', address.address);
     callback();
   },
   onData(stream, session, callback) {
     simpleParser(stream, async (err, parsed) => {
       if (err) return callback(err);
 
-      const { from, to, subject, text, html } = parsed;
-      console.log('Received email:', subject, 'From:', from.text);
+      const { from, to, subject, text, html, attachments } = parsed;
+      console.log('✉️  Received email:', subject, 'From:', from.text);
 
-      // Forward email to external SMTP server (like Gmail) using Nodemailer
+      // Forward to external SMTP relay
       try {
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com', // Replace with your sending SMTP server
-          port: 587,
-          secure: false,
-          auth: {
-            user: 'your@gmail.com', // SMTP username
-            pass: 'your-app-password' // SMTP password / app password
-          }
-        });
+        const transporter = nodemailer.createTransport(RELAY_SMTP);
 
         await transporter.sendMail({
           from: from.text,
           to: to.text,
           subject,
           text,
-          html
+          html,
+          attachments
         });
 
         console.log('✅ Forwarded email successfully');
       } catch (e) {
-        console.error('Error forwarding email:', e);
+        console.error('❌ Error forwarding email:', e);
       }
 
-      callback();
+      callback(); // done processing
     });
   }
 });
 
-server.listen(25, () => console.log('SMTP server listening on port 25'));
+// Listen on port 25 (or 587 if blocked)
+const PORT = 25;
+server.listen(PORT, () => {
+  console.log(`🚀 SMTP server listening on port ${PORT}`);
+});
+
+server.on('error', (err) => {
+  console.error('⚠️ SMTP Server error:', err);
+});

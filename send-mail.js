@@ -1,47 +1,21 @@
-const nodemailer = require("nodemailer");
-
-// const transporter = nodemailer.createTransport({
-//   host: "mail.somacharnews.com",
-//   port: 587,
-//   secure: false, // use true for 465
-//   auth: {
-//     user: "symul@somacharnews.com",
-//     pass: "YOUR_PASSWORD",
-//   },
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-// });
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: "mail.somacharnews.com",
+  host: '127.0.0.1', // your Node.js SMTP server
   port: 25,
   secure: false,
   auth: {
-    user: "symul@somacharnews.com",
-    pass: "YOUR_PASSWORD",
-  },
-  tls: { rejectUnauthorized: false },
+    user: 'symul@somacharnews.com',
+    pass: 'YOUR_PASSWORD'
+  }
 });
 
-const mailOptions = {
+transporter.sendMail({
   from: '"Symul" <symul@somacharnews.com>',
-  to: "saimonpranta@gmail.com",
-  subject: "Professional Mail Test",
-  text: "Hello! This is a professional test from my Node.js mail server.",
-  html: "<p>Hello! This is a <b>professional test</b> from my Node.js mail server.</p>",
-  dkim: {
-    domainName: "somacharnews.com",
-    keySelector: "default",
-    privateKey: require("fs").readFileSync(
-      "/etc/opendkim/keys/somacharnews.com/default.private"
-    ),
-  },
-};
-
-transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-    return console.error("Error sending mail:", error);
-  }
-  console.log("✅ Mail sent:", info.response);
+  to: 'saimonpranta@gmail.com',
+  subject: 'Hello from Node.js SMTP Server',
+  text: 'This is a test email sent through Node.js SMTP server.',
+}, (err, info) => {
+  if (err) return console.error(err);
+  console.log('✅ Mail sent:', info.response);
 });
