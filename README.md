@@ -107,6 +107,14 @@ Type: TXT
 Host: _dmarc
 Value: "v=DMARC1; p=none; rua=mailto:postmaster@somacharnews.com"
 ```
+
+#### Set PTR Record (Reverse DNS)
+You cannot set PTR in your DNS panel — it must be done by your server provider or VPS host (e.g., DigitalOcean, AWS, Hetzner, etc.).
+
+✅ Ask your hosting provider support:
+```text
+“Please set the reverse DNS (PTR) record for my IP 103.251.247.158 to mail.somacharnews.com.”
+```
 ### 5. SMTP Server Setup
 #### a) Receiving Emails
 `receive-mail/index.js` handles receiving emails on port `25`.
@@ -250,7 +258,17 @@ dig TXT 72.60.108.1 +short
 dig TXT default._domainkey.somacharnews.com +short
  
 ```
- 
+
+#### d) Check reverse DNS (PTR)
+```bash
+dig -x 103.251.247.158 +short
+```
+
+Expected output:
+
+```
+mail.somacharnews.com.
+```
 
 ### 8. Notes on Deliverability
 - Many email providers (Gmail, Outlook) check SPF, DKIM, DMARC. If these are missing, emails may go to Spam.
