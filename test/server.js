@@ -3,8 +3,8 @@ const { simpleParser } = require("mailparser");
 const fs = require("fs");
 const path = require("path");
 
-const SSL_KEY_PATH = "/etc/letsencrypt/live/mail.micple.com/privkey.pem";
-const SSL_CERT_PATH = "/etc/letsencrypt/live/mail.micple.com/fullchain.pem";
+const SSL_KEY_PATH = "/etc/letsencrypt/live/mail.somacharnews.com/privkey.pem";
+const SSL_CERT_PATH = "/etc/letsencrypt/live/mail.somacharnews.com/fullchain.pem";
 
 let sslOptions = {};
 try {
