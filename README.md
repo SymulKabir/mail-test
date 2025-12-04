@@ -105,9 +105,14 @@ Sign emails for verification.
 #### Generate DKIM keys:
 ```bash
 mkdir -p /etc/opendkim/keys/somacharnews.com
+
 openssl genrsa -out /etc/opendkim/keys/somacharnews.com/default.private 2048
+
 openssl rsa -in /etc/opendkim/keys/somacharnews.com/default.private -pubout -out /etc/opendkim/keys/somacharnews.com/default.public
+
+cat /etc/opendkim/keys/somacharnews.com/default.public
 ```
+Copy the `default.public` file output
 
 #### Add TXT record in DNS:
 ```text
