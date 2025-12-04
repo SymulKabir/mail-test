@@ -93,7 +93,11 @@ Host: @
 Value: "v=spf1 a mx ip4:<YOUR_SERVER_PUBLIC_IP> -all"
 
 ```
-
+Then Verify
+```bash
+dig TXT somacharnews.com +short
+```
+Your can see `"v=spf1 a mx ip4:<YOUR_SERVER_PUBLIC_IP> -all"` like this result
 
 ### d) DKIM Record (Optional but recommended)
 Sign emails for verification.
